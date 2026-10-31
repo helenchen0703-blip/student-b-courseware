@@ -3,303 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Boxing Camp · Day 1</title>
+<title>Student B · Courseware</title>
 <style>
-  :root {
-    --bg: #fbf6ee; --ink: #1f2a44; --muted: #6b7280; --red: #d64933; --gold: #e0a526;
-    --sh: #ef6b57; --hl: #ffe27a; --card: #ffffff; --line: #e8dfd0;
-    --hub1: #1b2440; --hub2: #0f1529;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
-  body { font-family: "Andika", "Century Gothic", "Avenir Next", "Helvetica Neue", Arial, sans-serif; color: var(--ink); background: var(--bg); overflow: hidden; }
-  button { font: inherit; cursor: pointer; }
-
-  /* ---------- HUB ---------- */
-  #hub { position: fixed; inset: 0; background: linear-gradient(rgba(15,21,41,.78), rgba(15,21,41,.92)), url('img/banner.jpg') center/cover; color: #f4efe6; display: flex; flex-direction: column; align-items: center; padding: 4vh 16px; }
-  #hub .eyebrow { letter-spacing: .3em; font-size: 13px; opacity: .7; }
-  #hub h1 { font-size: clamp(36px, 6vw, 64px); margin: 6px 0 2px; letter-spacing: .04em; }
-  #hub .tag { opacity: .8; margin-bottom: 3vh; font-size: 17px; }
-  .fan { position: relative; width: min(1000px, 100%); height: min(46vh, 360px); display: flex; justify-content: center; align-items: flex-end; }
-  .fcard { position: absolute; bottom: 0; width: clamp(130px, 17vw, 190px); aspect-ratio: 3/4.2; border-radius: 18px; border: 4px solid rgba(255,255,255,.85); box-shadow: 0 14px 30px rgba(0,0,0,.45); display: flex; flex-direction: column; justify-content: space-between; padding: 12px; color: #fff; transition: transform .25s, z-index 0s; transform-origin: 50% 120%; }
-  .fcard .em { font-size: clamp(46px, 6vw, 70px); text-align: center; margin-top: 12%; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
-  .fcard .num { position: absolute; top: 10px; left: 12px; font-weight: 700; opacity: .85; }
-  .fcard .nm { font-weight: 700; font-size: clamp(15px, 1.8vw, 19px); }
-  .fcard .sm { font-size: 12px; opacity: .9; }
-  .fcard:hover, .fcard.sel { z-index: 10 !important; }
-  #hubInfo { margin-top: 4vh; width: min(720px, 100%); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: 14px; padding: 14px 18px; display: flex; gap: 16px; align-items: center; }
-  #hubInfo .big { font-size: 42px; }
-  #hubInfo h3 { margin: 0 0 3px; font-size: 20px; }
-  #hubInfo p { margin: 0; opacity: .8; font-size: 14px; font-family: "PingFang SC", sans-serif; }
-  #hubInfo button { margin-left: auto; background: var(--gold); color: #1b1b1b; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 700; white-space: nowrap; }
-  #hub .hint { margin-top: auto; font-size: 12px; opacity: .5; font-family: "PingFang SC", sans-serif; }
-
-  /* ---------- DECK ---------- */
-  #deck { position: fixed; inset: 0; display: none; flex-direction: column; }
-  .bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #f3ebde; border-bottom: 1px solid var(--line); font-size: 14px; }
-  .bar button { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 5px 10px; }
-  .bar .title { font-weight: 700; margin-left: 6px; }
-  .dots { display: flex; gap: 4px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: #d8ccb8; }
-  .dot.on { background: var(--red); }
-  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3vh 4vw; overflow: auto; }
-  .slide { width: 100%; max-width: 1100px; text-align: center; font-size: calc(var(--fs, 1) * 1rem); }
-  .note { background: #fff8e8; border-top: 1px dashed #e5c98a; padding: 6px 16px; font-family: "PingFang SC", sans-serif; font-size: 14px; color: #6b5a33; min-height: 34px; }
-  .note.hide { display: none; }
-
-  .em-big { font-size: 7em; line-height: 1.1; }
-  .h-big { font-size: 4.4em; font-weight: 700; margin: .1em 0; }
-  .h-mid { font-size: 2.6em; font-weight: 700; margin: .2em 0; }
-  .sub { font-size: 1.6em; color: var(--muted); }
-  .sh { color: var(--sh); font-weight: 700; }
-  .wgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.2vh 3vw; font-size: 3.6em; }
-  .wtile { background: var(--card); border: 3px solid var(--line); border-radius: 18px; padding: .25em .2em; }
-  .wtile.alien { color: #2e7d32; border-color: #9ccc9f; border-style: dashed; }
-  .alienlab { color: #2e7d32; font-size: 1.4em; margin: 2.5vh 0 1vh; }
-  .flash { font-size: 9em; font-weight: 700; }
-  .tiles { display: flex; justify-content: center; gap: 2vw; margin: 3vh 0; }
-  .tile { font-size: 5em; min-width: 1.5em; padding: .05em .25em; border-radius: 16px; border: 4px solid var(--line); background: #fff; opacity: .35; transition: .2s; }
-  .tile.on { opacity: 1; border-color: var(--gold); transform: translateY(-6px); }
-  .reveal { font-size: 4.5em; font-weight: 700; min-height: 1.3em; }
-  .bigbtn { margin-top: 2vh; background: var(--red); color: #fff; border: 0; border-radius: 14px; padding: .5em 1.2em; font-size: 1.4em; font-weight: 700; }
-  .ghost { background: #fff; color: var(--ink); border: 2px solid var(--line); }
-  .story { background: var(--card); border: 3px solid var(--line); border-radius: 22px; padding: 4vh 4vw; text-align: left; font-size: 2.9em; line-height: 1.9; }
-  .w { border-radius: 8px; padding: 0 .06em; cursor: pointer; }
-  .w.mark { background: var(--hl); box-shadow: 0 0 0 3px var(--hl); }
-  .pg { font-size: 1.1em; color: var(--muted); margin-bottom: 1vh; }
-  .ask { margin-top: 3vh; font-size: 2em; color: #2471a3; font-weight: 700; min-height: 1.4em; }
-  .cmd { font-size: 6em; font-weight: 700; }
-  .vocab { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2vw; }
-  .vocab div { background: #fff; border: 3px solid var(--line); border-radius: 18px; padding: 2vh 0; }
-  .vocab .e { font-size: 4.5em; }
-  .vocab .t { font-size: 2.6em; font-weight: 700; }
-  .steps { display: flex; justify-content: center; align-items: center; gap: 2vw; font-size: 2.6em; font-weight: 700; flex-wrap: wrap; }
-  .steps .e { font-size: 2.2em; display: block; }
-  .steps .arr { font-size: 1.6em; color: var(--muted); }
-  .qlist { text-align: left; display: inline-block; font-size: 2.6em; line-height: 1.8; }
-  .qlist .q { opacity: .15; transition: .2s; }
-  .qlist .q.on { opacity: 1; }
-  .belt { display: inline-block; border: 10px double var(--gold); border-radius: 40px; padding: 4vh 6vw; background: #fffaf0; }
-  .speak { border: 0; background: none; font-size: 1.3em; vertical-align: middle; }
-  .fcard { overflow: hidden; }
-  .fcard .art { width: 100%; height: 60%; object-fit: cover; margin-top: 14px; border-radius: 10px; -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%); }
-  .fcard .pk { font-size: 11px; opacity: .9; margin-top: 2px; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
-  .fcard > div:last-child { min-width: 0; width: 100%; }
-  #hubInfo .thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; }
-  .hero { height: 46vh; max-width: 90%; object-fit: contain; border-radius: 22px; box-shadow: 0 10px 28px rgba(0,0,0,.18); margin-bottom: 1vh; }
-  .storyrow { display: grid; grid-template-columns: auto 1fr; gap: 3vw; align-items: center; }
-  .storyrow .pic { height: 62vh; aspect-ratio: 1051/1492; object-fit: cover; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,0,0,.18); }
-  .storyrow .story { font-size: 2.3em; }
-  .stepimg { height: 34vh; aspect-ratio: 1051/1492; object-fit: cover; border-radius: 14px; display: block; margin: 0 auto 1vh; box-shadow: 0 6px 16px rgba(0,0,0,.15); }
-  @media (max-width: 700px) {
-    .storyrow { grid-template-columns: 1fr; }
-    .storyrow .pic { height: 34vh; margin: 0 auto; }
-    .slide { font-size: calc(var(--fs, 1) * 0.6rem); }
-    .vocab { grid-template-columns: repeat(2, 1fr); }
-  }
+:root{--bg:#fbf6ee;--ink:#1f2a44;--muted:#6b7280;--red:#d64933;--gold:#e0a526;--card:#fff;--line:#e8dfd0}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.6 -apple-system,"PingFang SC",sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:60px 20px}
+h1{font-size:32px;margin-bottom:8px}
+.sub{color:var(--muted);margin-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;max-width:800px;width:100%}
+a.card{display:block;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:24px;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s}
+a.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+a.card .tag{display:inline-block;background:var(--red);color:#fff;font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px}
+a.card h2{font-size:22px;margin-bottom:4px}
+a.card .date{color:var(--muted);font-size:15px}
+a.card p{color:var(--muted);font-size:15px;margin-top:8px}
 </style>
 </head>
 <body>
-
-<div id="hub">
-  <div class="eyebrow">BOXING CAMP · DAY 1</div>
-  <h1>🥊 Boxing Camp</h1>
-  <div class="tag">Five rounds. One sound: <span style="color:#ff9c8a;font-weight:700">sh</span></div>
-  <div class="fan" id="fan"></div>
-  <div id="hubInfo"></div>
-  <div class="hint">鼠标移到卡片上看介绍，点击进入 · 课件里 ← → 翻页，N 显示/隐藏老师提示，Esc 回到总入口</div>
+<h1>Student B Courseware</h1>
+<p class="sub">Boxing Camp Series</p>
+<div class="grid">
+  <a class="card" href="boxing-day1.html">
+    <span class="tag">Day 1</span>
+    <h2>Boxing Camp · Day 1</h2>
+    <div class="date">2026-10-24</div>
+    <p>sh 音教学 + UFLI 45《The Ship》指导阅读</p>
+  </a>
+  <a class="card" href="boxing-day2.html">
+    <span class="tag">Day 2</span>
+    <h2>Boxing Camp · Day 2</h2>
+    <div class="date">2026-10-31</div>
+    <p>th 音教学 + 拳击训练营互动课件</p>
+  </a>
 </div>
-
-<div id="deck">
-  <div class="bar">
-    <button id="home">⌂ Camp</button>
-    <span class="title" id="dtitle"></span>
-    <div class="dots" id="dots"></div>
-    <button id="prev">‹</button><span id="count"></span><button id="next">›</button>
-    <button id="fsm">A−</button><button id="fsp">A+</button>
-    <button id="ntog">老师提示</button>
-  </div>
-  <div class="stage"><div class="slide" id="slide"></div></div>
-  <div class="note" id="note"></div>
-</div>
-
-<script>
-const sh = s => s.replace(/(sh|Sh)/g, '<span class="sh">$1</span>');
-const words = s => s.split(' ').map(w => `<span class="w">${sh(w)}</span>`).join(' ');
-const say = w => { try { const u = new SpeechSynthesisUtterance(w); u.lang = 'en-US'; u.rate = .8; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} };
-
-const ROUNDS = [
-  { name: 'Warm-up', img: 'card1_alcremie', pk: 'Alcremie', zh: '热身', em: '🎂', c1: '#f08a5d', c2: '#d64933', min: '0–5′',
-    info: '生日开场 + TPR 动作指令，进入英文状态，看他能不能听懂 1 步、2 步指令。',
-    slides: [
-      { t: 'title', img: 'card1_alcremie', em: '🎂', big: 'Happy birthday!', sub: 'How old are you now?', note: '他上周末刚过生日。顺便确认年龄。' },
-      { t: 'cmd', img: 'A_punch', em: '👊', text: 'Punch!', note: '先示范，再只说不做。' },
-      { t: 'cmd', img: 'C_hitmon', em: '🫲', text: 'Left jab.' },
-      { t: 'cmd', img: 'B_lucario', em: '🫱', text: 'Right jab.' },
-      { t: 'cmd', img: 'F_duck', em: '🙇', text: 'Duck!' },
-      { t: 'cmd', img: 'greninja', em: '🦘', text: 'Jump!' },
-      { t: 'cmd', em: '👃', text: 'Touch your nose.' },
-      { t: 'title', img: 'E_meditate', em: '👊👊 ➜ 🪑', big: 'Punch two times', sub: 'and sit down.', note: '两步指令：一步 ✓/S/✗，两步 ✓/S/✗ 记在纸上。' },
-    ] },
-  { name: 'Quick Check', img: 'card2_inteleon', pk: 'Inteleon', zh: '快速摸底', em: '🔍', c1: '#5fa8d3', c2: '#2b6cb0', min: '5–15′',
-    info: 'CVC、Floss 各一组，再认 5 个书里会用到的 Heart words。结果决定《The Ship》走 A 路线（自己读）还是 B 路线（你领读）。',
-    slides: [
-      { t: 'title', img: 'card2_inteleon', big: 'Keen Eye!', sub: 'Read like a detective. 🔍', note: 'Inteleon 用放大镜找线索：读每个词时要看清每个字母。' },
-      { t: 'grid', title: 'Level 1', words: ['sat','pig','hot','bed','mud','fin'], aliens: ['zot','mip'], note: '读对 ≥ 5 → A 路线；≤ 4 → B 路线。读错记下他读成什么。Alien 词是编的词，看他是不是真的在拼读。' },
-      { t: 'grid', title: 'Level 2', words: ['hill','off','mess','buzz','bell','puff'], aliens: ['jiff','vell'], note: 'Level 1 吃力就跳过这一关。' },
-      { t: 'flash', word: 'the', note: 'Heart words：3 秒内认出 = 秒认。认不出不教，直接下一张。' },
-      { t: 'flash', word: 'to' },
-      { t: 'flash', word: 'said' },
-      { t: 'flash', word: 'my' },
-      { t: 'flash', word: 'look', note: '5 个里认 ≥ 3 → 可以走 A 路线。' },
-    ] },
-  { name: 'sh Power', img: 'card3_mime', pk: 'Mr. Mime', zh: 'sh 教学', em: '🤫', c1: '#9b7fd1', c2: '#6b46c1', min: '15–27′',
-    info: '五层：听（sh 闪躲 / s 出拳）→ 认 → 拼读 → 拼写 → 在句子里读。',
-    slides: [
-      { t: 'title', img: 'card3_mime', em: '🤫', big: '<span class="sh">sh</span>', sub: 'Two letters, one sound.', note: '手指放嘴前做“嘘”。' },
-      { t: 'title', em: '🙇 &nbsp; 👊', big: '<span class="sh">sh</span> → Duck! &nbsp; s → Punch!', sub: 'Listen!', note: '你说：ship · sip · shell · sell · shop · sock · she · see · fish。记对几个 /9。' },
-      { t: 'blend', parts: ['sh','i','p'], word: 'ship', em: '🚢', note: '点“Next sound”一个音一个音亮起来，他每说一个音出一拳，最后说出整个词。' },
-      { t: 'blend', parts: ['f','i','sh'], word: 'fish', em: '🐟' },
-      { t: 'blend', parts: ['sh','o','p'], word: 'shop', em: '🏪' },
-      { t: 'blend', parts: ['d','i','sh'], word: 'dish', em: '🍽️' },
-      { t: 'blend', parts: ['sh','e','d'], word: 'shed', em: '🛖' },
-      { t: 'spell', word: 'ship', em: '🚢', note: '拼写：点 🔊 或你来说，他在纸上写或用字母卡摆，再点 Check。' },
-      { t: 'spell', word: 'fish', em: '🐟' },
-      { t: 'story', lines: ['I see a fish.'], ask: 'Show me the sh!', note: '点词可以高亮。让他自己指出 sh 在哪里。' },
-      { t: 'title', img: 'D_ball', big: 'Break time!', sub: 'Drink some water. 💧', note: '休息 2 分钟：喝水、跳一跳。' },
-    ] },
-  { name: 'The Ship', img: 'card4_lapras', pk: 'Lapras', zh: '指导阅读', em: '🚢', c1: '#3fb6b2', c2: '#1f7a8c', min: '29–50′',
-    info: 'UFLI 45 小书。读前预测、预教 4 个词；读中每页停下来问 “Show me the word”；读后先合上书回答。',
-    slides: [
-      { t: 'title', img: 'ship_p1_cover', em: '🚢', big: 'The <span class="sh">Sh</span>ip', sub: 'Who is on the ship? Where are they? What will they do?', note: '读前：看小书封面一起预测。B 路线：你读一句他跟一句，他只负责自己读 sh 词。' },
-      { t: 'vocab', items: [['🥅','net'],['👜','bag'],['🏊','swim'],['🦘','jump']], note: '用动作预教：撒网、拿包、游泳、跳。' },
-      { t: 'story', img: 'ship_p1_cover', pg: 'p2', lines: ['Look at the ship.', 'Trish and Josh jump on the ship deck.'], note: 'deck 里有 ck，卡住直接告诉他。' },
-      { t: 'story', img: 'ship_p3', pg: 'p3', lines: ['Trish has a net to get fish.', 'Josh has a bag to get shells.'], ask: 'What does Trish have? Show me the word.', note: '他指出 net 就点一下高亮。看他是看图答的还是在字里找到的。' },
-      { t: 'story', img: 'ship_p4', pg: 'p4', lines: ['Trish jumps off the ship with the net.', 'She swims to get fish.'], ask: 'Act it out! 🦘 🏊', note: '让他演 jump 和 swim。' },
-      { t: 'story', img: 'ship_p5', pg: 'p5', lines: ['Josh jumps off the ship with his bag.', 'He swims to get shells.'] },
-      { t: 'story', img: 'ship_p6', pg: 'p6', lines: ['Trish and Josh get back on the ship.', '“Look at the fish in my net,” said Trish.', '“Look at the shells in my bag,” said Josh.'], ask: 'What is in Josh’s bag? Show me the word.' },
-      { t: 'story', img: 'ship_p6', pg: 'p7', lines: ['We had fun on the ship.'] },
-      { t: 'qa', title: '📕 Close the book!', items: ['Who jumps first?', 'What did Trish get?', 'What did Josh get?'], note: '先合上书问。答不出再打开书找，记“合上书 / 打开书”。中文、指图、动作回答都算理解，记下用了哪种。' },
-      { t: 'steps', items: [['🦘','jump','ship_p4'],['🏊','swim','ship_p5'],['🚢','get back','ship_p6']], note: '用 3 个动作复述故事。' },
-      { t: 'grid', title: '<span class="sh">sh</span> Word Hunt', words: ['ship','fish','shells','Trish','Josh'], note: '指出 sh，读出来（小书 p8）。' },
-    ] },
-  { name: 'Final Round', img: 'card5_trophy', pk: 'Champion', zh: 'Exit check', em: '🏆', c1: '#f2c14e', c2: '#c98a12', min: '50–55′',
-    info: '不给提示：读书里没出现过的 sh 词 + 一个 Alien 词；最后发冠军腰带。',
-    slides: [
-      { t: 'flash', word: 'shop', note: '不提示、不给图。✓ / S / ✗ 记在纸上。' },
-      { t: 'flash', word: 'dish' },
-      { t: 'flash', word: 'shed' },
-      { t: 'flash', word: 'rush' },
-      { t: 'flash', word: 'shom', alien: true, note: 'Alien 词：读出来说明真的会拼 sh。' },
-      { t: 'title', em: '👂', big: 'Which one has <span class="sh">sh</span>?', sub: 'sip / ship &nbsp;·&nbsp; sell / shell', note: '你说一对词，他指出哪个有 sh。' },
-      { t: 'champ', note: '发贴纸。让他说：I can ___.（原样记下他自己说的句子）。然后给家长三句话反馈。' },
-    ] },
-];
-
-let cur = 0, idx = 0, fs = 1, notesOn = true, step = 0;
-const $ = id => document.getElementById(id);
-
-// ---------- hub ----------
-function buildHub() {
-  const fan = $('fan'), n = ROUNDS.length;
-  ROUNDS.forEach((r, i) => {
-    const c = document.createElement('button');
-    c.className = 'fcard';
-    const off = i - (n - 1) / 2;
-    c.style.background = `linear-gradient(160deg, ${r.c1}, ${r.c2})`;
-    c.style.left = `calc(50% - 95px + ${off * 15}%)`;
-    c.style.transform = `rotate(${off * 7}deg) translateY(${Math.abs(off) * 14}px)`;
-    c.style.zIndex = 5 - Math.abs(Math.round(off));
-    c.dataset.base = c.style.transform;
-    c.innerHTML = `<span class="num">${i + 1}</span>${r.img ? `<img class="art" src="img/${r.img}.jpg" alt="">` : `<div class="em">${r.em}</div>`}<div><div class="nm">${r.name}</div><div class="sm">${r.min}</div><div class="pk">${r.pk || ''}</div></div>`;
-    c.onmouseenter = () => { showInfo(i); document.querySelectorAll('.fcard').forEach(x => x.style.transform = x.dataset.base); c.style.transform = c.dataset.base + ' translateY(-30px) scale(1.06)'; };
-    c.onclick = () => openDeck(i);
-    fan.appendChild(c);
-  });
-  showInfo(0);
-}
-function showInfo(i) {
-  const r = ROUNDS[i];
-  $('hubInfo').innerHTML = `${r.img ? `<img class="thumb" src="img/${r.img}.jpg" alt="">` : `<div class="big">${r.em}</div>`}<div><h3>Round ${i + 1} · ${r.name}</h3><p>${r.zh} · ${r.min} · ${r.info}</p></div><button onclick="openDeck(${i})">Enter →</button>`;
-}
-
-// ---------- deck ----------
-function openDeck(i) { cur = i; idx = 0; $('hub').style.display = 'none'; $('deck').style.display = 'flex'; render(); }
-function goHub() { $('deck').style.display = 'none'; $('hub').style.display = 'flex'; showInfo(cur); }
-
-function render() {
-  const r = ROUNDS[cur], s = r.slides[idx]; step = 0;
-  $('dtitle').textContent = `Round ${cur + 1} · ${r.name}`;
-  $('count').textContent = `${idx + 1} / ${r.slides.length}`;
-  $('dots').innerHTML = r.slides.map((_, k) => `<span class="dot ${k === idx ? 'on' : ''}"></span>`).join('');
-  const el = $('slide'); el.style.setProperty('--fs', fs);
-  let h = '';
-  switch (s.t) {
-    case 'title': h = `${s.img ? `<img class="hero" src="img/${s.img}.jpg" alt="">` : `<div class="em-big">${s.em}</div>`}<div class="h-big">${s.big}</div><div class="sub">${s.sub || ''}</div>`; break;
-    case 'cmd': h = `${s.img ? `<img class="hero" src="img/${s.img}.jpg" alt="">` : `<div class="em-big">${s.em}</div>`}<div class="cmd">${s.text}</div><button class="speak" onclick="say('${s.text}')">🔊</button>`; break;
-    case 'grid':
-      h = `<div class="h-mid">🥊 ${s.title}</div><div class="wgrid">${s.words.map(w => `<div class="wtile w">${sh(w)}</div>`).join('')}</div>`;
-      if (s.aliens) h += `<div class="alienlab">👽 Alien words</div><div class="wgrid">${s.aliens.map(w => `<div class="wtile alien w">${sh(w)}</div>`).join('')}</div>`;
-      break;
-    case 'flash': h = `${s.alien ? '<div class="alienlab">👽 Alien word</div>' : ''}<div class="flash" style="${s.alien ? 'color:#2e7d32' : ''}">${sh(s.word)}</div>`; break;
-    case 'blend':
-      h = `<div class="sub">Say each sound. Punch! 👊</div><div class="tiles">${s.parts.map(p => `<div class="tile">${sh(p)}</div>`).join('')}</div>
-           <div class="reveal" id="rv"></div><button class="bigbtn" id="stepBtn">Next sound ▶</button>`; break;
-    case 'spell':
-      h = `<div class="em-big">${s.em}</div><div class="h-mid">Spell it! <button class="speak" onclick="say('${s.word}')">🔊</button></div>
-           <div class="reveal" id="rv"></div><button class="bigbtn ghost" id="stepBtn">Check ✓</button>`; break;
-    case 'story':
-      h = `${s.pg ? `<div class="pg">📖 ${s.pg}</div>` : ''}<div class="${s.img ? 'storyrow' : ''}">${s.img ? `<img class="pic" src="img/${s.img}.jpg" alt="">` : ''}<div class="story">${s.lines.map(words).join('<br>')}</div></div>
-           ${s.ask ? `<div class="ask" id="rv"></div><button class="bigbtn ghost" id="stepBtn">Question ?</button>` : ''}`; break;
-    case 'vocab': h = `<div class="h-mid">Words to know</div><div class="vocab">${s.items.map(([e, t]) => `<div><div class="e">${e}</div><div class="t">${t}</div></div>`).join('')}</div>`; break;
-    case 'qa': h = `<div class="h-mid">${s.title}</div><div class="qlist">${s.items.map((q, k) => `<div class="q">${k + 1}. ${q}</div>`).join('')}</div><br><button class="bigbtn" id="stepBtn">Next question ▶</button>`; break;
-    case 'steps': h = `<div class="h-mid">Tell me the story!</div><div class="steps">${s.items.map(([e, t, im]) => `<div>${im ? `<img class="stepimg" src="img/${im}.jpg" alt="">` : `<span class="e">${e}</span>`}<div>${e} ${t}</div></div>`).join('<span class="arr">➜</span>')}</div>`; break;
-    case 'champ': h = `<div class="belt"><img class="hero" style="height:26vh" src="img/card5_trophy.jpg" alt=""><div class="h-big" style="color:var(--gold)">CHAMPION!</div><div class="h-mid">I can read <span class="sh">sh</span>!</div><div class="sub">I can ________.</div></div>`; break;
-  }
-  el.innerHTML = h;
-  el.querySelectorAll('.w').forEach(w => w.onclick = () => w.classList.toggle('mark'));
-  const b = $('stepBtn'); if (b) b.onclick = () => doStep(s);
-  // carry the most recent note forward within a deck
-  let note = ''; for (let k = idx; k >= 0; k--) if (r.slides[k].note) { note = r.slides[k].note; break; }
-  $('note').textContent = '👩‍🏫 ' + note;
-  $('note').classList.toggle('hide', !notesOn);
-}
-
-function doStep(s) {
-  if (s.t === 'blend') {
-    const tiles = document.querySelectorAll('.tile');
-    if (step < tiles.length) { tiles[step].classList.add('on'); step++; /* no TTS here: it would say letter names, not sounds */ if (step === tiles.length) $('stepBtn').textContent = 'Blend it! 💥'; }
-    else { $('rv').innerHTML = `${s.em} ${sh(s.word)}`; say(s.word); $('stepBtn').style.visibility = 'hidden'; }
-  } else if (s.t === 'spell') { $('rv').innerHTML = sh(s.word); }
-  else if (s.t === 'story') { $('rv').textContent = s.ask; $('stepBtn').style.visibility = 'hidden'; }
-  else if (s.t === 'qa') { const q = document.querySelectorAll('.q'); if (step < q.length) { q[step].classList.add('on'); step++; } if (step === q.length) $('stepBtn').style.visibility = 'hidden'; }
-}
-
-function move(d) {
-  const n = ROUNDS[cur].slides.length;
-  if (idx + d >= n) { if (cur < ROUNDS.length - 1) { cur++; idx = 0; } else return; }
-  else if (idx + d < 0) { if (cur > 0) { cur--; idx = ROUNDS[cur].slides.length - 1; } else return; }
-  else idx += d;
-  render();
-}
-
-$('home').onclick = goHub;
-$('prev').onclick = () => move(-1);
-$('next').onclick = () => move(1);
-$('fsm').onclick = () => { fs = Math.max(.6, fs - .1); render(); };
-$('fsp').onclick = () => { fs = Math.min(1.6, fs + .1); render(); };
-$('ntog').onclick = () => { notesOn = !notesOn; $('note').classList.toggle('hide', !notesOn); };
-document.addEventListener('keydown', e => {
-  if ($('deck').style.display !== 'flex') return;
-  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); move(1); }
-  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); move(-1); }
-  if (e.key === 'Escape') goHub();
-  if (e.key.toLowerCase() === 'n') $('ntog').click();
-});
-buildHub();
-// #r=3&s=2 opens Round 3, slide 2 directly
-const hp = new URLSearchParams(location.hash.slice(1));
-if (hp.has('r')) { openDeck(Math.min(ROUNDS.length, +hp.get('r')) - 1); idx = Math.max(0, (+hp.get('s') || 1) - 1); render(); }
-</script>
 </body>
 </html>
